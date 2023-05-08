@@ -19,7 +19,7 @@ function randomPick(array) {
   return array[randomInt(array.length)]
 }
 
-function Board({ squares, onPlay }) {
+function Board({ squares, onPlay, currentColor }) {
   function handleClick(i) {
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -30,9 +30,9 @@ function Board({ squares, onPlay }) {
   }
 
   let status = "";
-
+  // #fff700 yellow
   const componentArray = [
-    <Square color={"yellow"} onSquareClick={() => handleClick(0)} />,
+    <Square color={currentColor} onSquareClick={() => handleClick(0)} />,
     <Square color={"blue"} onSquareClick={() => handleClick(1)} />,
     <Square color={"green"} onSquareClick={() => handleClick(2)} />,
     <Square color={"red"} onSquareClick={() => handleClick(3)} />,
@@ -53,8 +53,11 @@ function Board({ squares, onPlay }) {
 
 export default function Game() {
   const [history] = useState([Array(9).fill(null)]);
-
   const colors = ["yellow", "blue", "green", "red"]
+
+  const [currentColor, setCurrentColor] = useState(randomPick(colors));
+
+
 
 
   function handlePlay(nextSquares) {
@@ -62,7 +65,9 @@ export default function Game() {
   }
 
   function startGame() {
-    console.log(randomPick(colors))
+    console.log(currentColor)
+    const randomColorPick = randomPick(colors)
+    setCurrentColor(randomColorPick);
   }
 
 
@@ -84,7 +89,7 @@ export default function Game() {
   return (
     <div className="game">
       <div className="game-board">
-        <Board onPlay={handlePlay} />
+        <Board onPlay={handlePlay} currentColor={currentColor}/>
       </div>
       <div className="game-info">
         <ol>{moves}</ol>
